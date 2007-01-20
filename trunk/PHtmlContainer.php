@@ -9,11 +9,12 @@ class PHtmlContainer {
 		$this->dom = new DOMDocument($version, $iso);
 	}
 
-	public function & createElement($name, $value) {
-		return $this->createElement($name, $value);
+	public function & createElement($name, $value = null) {
+		return $this->dom->createElement($name, $value);
 	}
 
 	public function saveHTML() {
+		$this->dom->appendChild($this->createElement('html'));
 		return $this->dom->saveHTML();
 	}
 
