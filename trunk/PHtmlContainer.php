@@ -2,6 +2,7 @@
 /* $Id$ */
 
 class PHtmlContainer {
+	protected $xmlns;
 	protected $lang;
 	protected $dom;
 	protected $elements;
@@ -16,15 +17,20 @@ class PHtmlContainer {
 		return $this->dom->createElement($name, $value);
 	}
 
-	public function saveXML() {
-		$this->saveHTML();
+	public function saveHTML() {
+		return $this->saveXML();
 	}
 
-	public function saveHTML() {
-		$this->dom->appendChild($this->dom->createComment('DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-tranitional.dtd"'));
+	public function saveXML() {
+		//create the html node
+		$this->dom->appendChild($this->dom->createComment('DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'));
 		$this->dom->appendChild($html = $this->dom->createElementNS($this->xmlns, 'html'));
 		$html->setAttribute('xml:lang', $this->lang);
 		$html->setAttribute('lang', $this->lang);
+		//create the head node
+		$html->appendChild($head = $this->createElement('head'));
+		//create the body node
+		$html->appendChild($head = $this->createElement('body'));
 		return $this->dom->saveXML();
 	}
 
