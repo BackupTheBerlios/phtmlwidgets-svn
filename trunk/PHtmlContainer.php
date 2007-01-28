@@ -19,6 +19,11 @@ class PHtmlContainer {
 		return $this->dom->createElement($name, $value);
 	}
 
+	public function & createTable($rows = 1, $cols = 1) {
+		$t = new PHTMLTable($rows, $cols);
+		return $t;
+	}
+
 	public function saveHTML() {
 		return $this->saveXML();
 	}
