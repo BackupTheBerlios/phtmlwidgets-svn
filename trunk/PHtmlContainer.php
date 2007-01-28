@@ -20,8 +20,15 @@ class PHtmlContainer {
 	}
 
 	public function & createTable($rows = 1, $cols = 1) {
-		$t = new PHTMLTable($rows, $cols);
-		return $t;
+		$table = $this->dom->appendChild(new PHTMLTable($rows, $cols));
+		for($i = 0; $i < $table->getRowsNumber(); $i++) {
+			$row = $table->appendChild($this->createElement('tr'));
+			for($j = 0; $j < $table->getColumnsNumber(); $j++) {
+				$col = & $table->getCell($i, $j);
+				$row->appendChild($col = $this->createElement('td'));
+			}
+		}
+		return $table;
 	}
 
 	public function saveHTML() {
