@@ -1,15 +1,31 @@
 <?php
 /* $Id$ */
-class PHTMLTable extends DOMElement {
+
+class PHTMLTable extends DOMElement implements SplSubject {
 	protected $rows = 1;
 	protected $cols = 1;
 	protected $cellsAttributes = array(array(array()));
 	protected $cellsNodes = array(array(array()));
+	protected $observers = array();
 
 	public function __construct($rows = 1, $cols = 1) {
 		$this->rows = $rows;
 		$this->cols = $cols;
 		parent::__construct('table');
+	}
+
+	public function attach(SplObserver $o) {
+		$this->observers["$o"] = $o;
+	}
+
+	public function detach(SplObserver $o) {
+		unset($this->observers["$o"]);
+	}
+
+	public function notify() {
+		foreach($this->observers as $o) {
+			$o->update($this);
+		}
 	}
 
 	public function getRowsNumber() {
