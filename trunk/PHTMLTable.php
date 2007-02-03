@@ -15,15 +15,15 @@ class PHTMLTable extends DOMElement implements SplSubject {
 	}
 
 	public function attach(SplObserver $o) {
-		$this->observers["$o"] = $o;
+		$this->observers[md5(serialize($o))] = $o;
 	}
 
 	public function detach(SplObserver $o) {
-		unset($this->observers["$o"]);
+		unset($this->observers[md5(serialize($o))]);
 	}
 
 	public function notify() {
-		foreach($this->observers as $o) {
+		foreach($this->observers as $id => $o) {
 			$o->update($this);
 		}
 	}
