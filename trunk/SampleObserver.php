@@ -1,5 +1,5 @@
 <?php
-/* $Id */
+/* $Id$ */
 
 class SampleObserver implements SplObserver {
 	public function update(SplSubject $s) {
