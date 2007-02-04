@@ -1,6 +1,8 @@
 <?php
 /* $Id$ */
 
-require_once 'PHtmlContainer.php';
-require_once 'PHTMLTable.php';
-require_once 'SampleObserver.php';
+define('PHTMLWIDGETS_HOME', dirname(__FILE__));
+
+require_once PHTMLWIDGETS_HOME . '/PHtmlContainer.php';
+require_once PHTMLWIDGETS_HOME . '/PHTMLTable.php';
+require_once PHTMLWIDGETS_HOME . '/SampleObserver.php';

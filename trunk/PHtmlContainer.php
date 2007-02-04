@@ -6,7 +6,7 @@ class PHtmlContainer {
 	protected $lang;
 	protected $direction;
 	protected $dom;
-	protected $elements;
+	protected $elements = array();
 
 	public function __construct($xmlns = 'http://www.w3.org/1999/xhtml', $lang = 'en', $dir = 'ltr') {
 		$this->dom = new DOMDocument();
@@ -31,8 +31,8 @@ class PHtmlContainer {
 		return $table;
 	}
 
-	public function saveHTML() {
-		return $this->saveXML();
+	public function saveXML() {
+		return $this->saveHTML();
 	}
 
 	public function __set($name, DOMNode $n) {
@@ -43,21 +43,26 @@ class PHtmlContainer {
 		return $this->elements[$name];
 	}
 
-	public function saveXML() {
+	public function saveHTML() {
 		//create the html node
-		$this->dom->appendChild($this->dom->createComment('DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'));
-		$this->dom->appendChild($html = $this->dom->createElementNS($this->xmlns, 'html'));
-		$html->setAttribute('xml:lang', $this->lang);
-		$html->setAttribute('lang', $this->lang);
-		$html->setAttribute('dir', $this->direction);
-		//create the head node
-		$html->appendChild($head = $this->createElement('head'));
-		//create the body node
-		$html->appendChild($body = $this->createElement('body'));
-		foreach($this->elements as $element) {
-			$body->appendChild($element);
+		if (!$this->dom->getElementsByTagName('html')->item(0)) {
+			$this->dom->appendChild($html = $this->dom->createElementNS($this->xmlns, 'html'));
+			$html->setAttribute('xml:lang', $this->lang);
+			$html->setAttribute('lang', $this->lang);
+			$html->setAttribute('dir', $this->direction);
 		}
-		return $this->dom->saveXML();
+		//create the head node
+		if (!$this->dom->getElementsByTagName('head')->item(0)) {
+			$html->appendChild($head = $this->createElement('head'));
+		}
+		//create the body node
+		if (!$this->dom->getElementsByTagName('body')->item(0)) {
+			$html->appendChild($body = $this->createElement('body'));
+			foreach($this->elements as $element) {
+				$body->appendChild($element);
+			}
+		}
+		return $this->dom->saveHTML();
 	}
 
 	public function __toString() {
