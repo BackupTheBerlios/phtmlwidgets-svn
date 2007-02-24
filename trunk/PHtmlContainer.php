@@ -13,6 +13,14 @@ class PHtmlContainer {
 		$this->xmlns = $xmlns;
 		$this->lang = $lang;
 		$this->direction = $dir;
+		
+		//create the html node
+		$this->dom->appendChild($html = $this->dom->createElementNS($this->xmlns, 'html'));
+		$html->setAttribute('xml:lang', $this->lang);
+		$html->setAttribute('lang', $this->lang);
+		$html->setAttribute('dir', $this->direction);
+		$html->appendChild($this->head = &$this->createElement('head'));
+		$html->appendChild($this->body = &$this->createElement('body'));
 	}
 
 	public function & createElement($name, $value = null) {
@@ -35,32 +43,17 @@ class PHtmlContainer {
 		return $this->saveHTML();
 	}
 
-	public function __set($name, DOMNode $n) {
+	public function setNode($name, $n) {
 		$this->elements[$name] = $n;
 	}
 
-	public function __get($name) {
+	public function & getNode($name) {
 		return $this->elements[$name];
 	}
 
 	public function saveHTML() {
-		//create the html node
-		if (!$this->dom->getElementsByTagName('html')->item(0)) {
-			$this->dom->appendChild($html = $this->dom->createElementNS($this->xmlns, 'html'));
-			$html->setAttribute('xml:lang', $this->lang);
-			$html->setAttribute('lang', $this->lang);
-			$html->setAttribute('dir', $this->direction);
-		}
-		//create the head node
-		if (!$this->dom->getElementsByTagName('head')->item(0)) {
-			$html->appendChild($head = $this->createElement('head'));
-		}
-		//create the body node
-		if (!$this->dom->getElementsByTagName('body')->item(0)) {
-			$html->appendChild($body = $this->createElement('body'));
-			foreach($this->elements as $element) {
-				$body->appendChild($element);
-			}
+		foreach($this->elements as $element) {
+			$this->body->appendChild($element);
 		}
 		return $this->dom->saveHTML();
 	}
